@@ -29,6 +29,7 @@ use super::utils::encrypt_message;
 use super::utils::generate_keypair;
 use super::models::HostInformation;
 
+// used.
 pub async fn create_user(
     username: &str,
     password: &str,
@@ -113,6 +114,7 @@ pub async fn create_user(
     }
 }
 
+// used.
 pub async fn get_user_by_id(
     user_id: &str,
     pool: &Pool<Postgres>
@@ -133,6 +135,7 @@ pub async fn get_user_by_id(
     Ok(object)
 }
 
+// used.
 pub async fn edit_user_password(
     username: &str,
     old_password: &str,
@@ -190,6 +193,7 @@ pub async fn edit_user_password(
     }
 }
 
+// used.
 pub async fn edit_user_display_name(
     username: &str,
     new_display_name: &str,
@@ -220,6 +224,7 @@ pub async fn edit_user_display_name(
     Ok(update_op)
 }
 
+// used.
 pub async fn edit_user_pfp(
     username: &str,
     new_pfp_id: &str,
@@ -250,8 +255,7 @@ pub async fn edit_user_pfp(
     Ok(update_op)
 }
 
-
-
+// used.
 pub async fn edit_user_description(
     username: &str,
     new_description: &str,
@@ -282,6 +286,7 @@ pub async fn edit_user_description(
     Ok(update_op)
 }
 
+// used.
 pub async fn edit_user_primary(
     username: &str,
     new_primary: &str,
@@ -320,6 +325,7 @@ pub async fn edit_user_primary(
 
 }
 
+// used.
 pub async fn edit_user_secondary(
     username: &str,
     new_secondary: &str,
@@ -358,6 +364,7 @@ pub async fn edit_user_secondary(
 
 }
 
+// used.
 pub async fn edit_user_tertiary(
     username: &str,
     new_tertiary: &str,
@@ -395,6 +402,7 @@ pub async fn edit_user_tertiary(
     }
 }
 
+// used.
 pub async fn delete_user(
     user_id: &str,
     pool: &Pool<Postgres>
@@ -736,6 +744,7 @@ pub async fn get_chat_by_participants(
     }
 }
 
+// used.
 pub async fn create_invite_code(
     inv_code: &str,
     pool: &Pool<Postgres>
@@ -776,26 +785,7 @@ pub async fn create_invite_code(
     Ok(fetched)
 }
 
-pub async fn get_code_by_code(
-    code: &str,
-    pool: &Pool<Postgres>
-) -> Result<InviteCode, YokaiErr>{
-    let object: InviteCode = match query_as!(
-        InviteCode,
-        "SELECT * FROM invite_codes WHERE invite_code = $1",
-        code
-    )
-        .fetch_one(pool)
-        .await 
-    {
-        Ok(object) => object,
-        Err(e) => return Err::<InviteCode, YokaiErr>(
-            YokaiErr::new(&e.to_string())
-        )
-    };
-    Ok(object)
-}
-
+// used.
 pub async fn get_code_by_id(
     code_id: &str,
     pool: &Pool<Postgres>
@@ -816,6 +806,7 @@ pub async fn get_code_by_id(
     Ok(object)
 }
 
+// used.
 pub async fn delete_invite_code(
     code_id: &str,
     pool: &Pool<Postgres>
@@ -844,6 +835,7 @@ pub async fn delete_invite_code(
     Ok(del_op)
 }
 
+// used.
 pub async fn get_file_by_id(
     file_id: &str,
     pool: &Pool<Postgres>
@@ -898,6 +890,7 @@ pub async fn delete_user_file(
     Ok(file_del_op)
 }
 
+// used.
 pub async fn create_user_file(
     user: &str,
     file_path: &str,
@@ -944,6 +937,7 @@ pub async fn create_user_file(
     Ok(fetched)
 }
 
+// used.
 pub async fn get_host_info(
     pool: &Pool<Postgres>
 ) -> Result<HostInformation, YokaiErr>{
@@ -1023,6 +1017,7 @@ pub async fn create_host_info(
     }
 }
 
+// used.
 pub async fn edit_host_primary(
     new_primary: &str,
     pool: &Pool<Postgres>
@@ -1056,6 +1051,7 @@ pub async fn edit_host_primary(
     }
 }
 
+// used.
 pub async fn edit_host_secondary(
     new_secondary: &str,
     pool: &Pool<Postgres>
@@ -1089,6 +1085,7 @@ pub async fn edit_host_secondary(
     }
 }
 
+// used.
 pub async fn edit_host_tertiary(
     new_tertiary: &str,
     pool: &Pool<Postgres>
@@ -1122,6 +1119,7 @@ pub async fn edit_host_tertiary(
     }
 }
 
+// used.
 pub async fn delete_account(
     user: &str,
     pool: &Pool<Postgres>
@@ -1227,6 +1225,7 @@ pub async fn delete_account(
     Ok(acc_del)
 }
 
+// used.
 pub async fn create_api_token(
     user: &str,
     password: &str,
@@ -1297,6 +1296,7 @@ pub async fn create_api_token(
     }
 }
 
+// used.
 pub async fn get_token_by_id(
     token_id: &str,
     pool: &Pool<Postgres>
@@ -1317,6 +1317,7 @@ pub async fn get_token_by_id(
     Ok(object)
 }
 
+// used.
 pub async fn get_token_by_token(
     token: &str,
     pool: &Pool<Postgres>
@@ -1337,7 +1338,7 @@ pub async fn get_token_by_token(
     Ok(object)
 }
 
-
+// used.
 pub async fn get_user_by_token(
     token: &str,
     pool: &Pool<Postgres>
@@ -1363,6 +1364,7 @@ pub async fn get_user_by_token(
     Ok(user_obj)
 }
 
+// used.
 pub async fn delete_token(
     token: &str,
     pool: &Pool<Postgres>
@@ -1434,6 +1436,7 @@ pub async fn get_user_chats(
     Ok(chats_s)
 }
 
+// used.
 pub async fn get_user_contacts(
     user: &str,
     pool: &Pool<Postgres>
@@ -1563,7 +1566,6 @@ pub async fn get_user_tokens(
     };
     Ok(tokens)    
 }
-
 
 pub async fn user_exists(
     user: &str,

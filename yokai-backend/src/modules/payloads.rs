@@ -46,3 +46,20 @@ pub struct ChangePassworPayload{
     pub old_password: String,
     pub new_password: String
 }
+
+#[derive(Deserialize)]
+pub struct KickUserPayload{
+    pub api_token: String,
+    pub username: String
+}
+
+#[derive(Deserialize)]
+pub struct TokenOnlyPayload{
+    pub api_token: String
+}
+
+#[derive(Deserialize)]
+pub struct UserFileServePayload{
+    pub file_id: String,
+    pub api_token: String
+}

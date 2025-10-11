@@ -29,3 +29,21 @@ pub struct UserCreateResponse {
     pub tertiary_color: String,
     pub secondary_color: String,
 }
+
+#[derive(Serialize)]
+pub struct UserContact {
+    pub username: String,
+    pub description: String,
+    pub display_name: String,
+    pub pfp_url: Option<String>
+}
+
+#[derive(Serialize)]
+pub struct UserContactsResponse {
+    pub contacts: Vec<UserContact>
+}
+
+#[derive(Serialize)]
+pub struct FileCreateResponse{
+    pub file_url: String
+}
