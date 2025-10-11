@@ -1,0 +1,41 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT * FROM chats WHERE sender = $1 AND receiver = $2",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "chat_id",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "started",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "sender",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 3,
+        "name": "receiver",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "44163ffbf601103ee4c811b6a6f0ea64d3c88c07cc793713124f60591e5668dc"
+}

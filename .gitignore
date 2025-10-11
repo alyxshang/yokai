@@ -1,0 +1,6 @@
+# General.
+.DS_Store
+
+# Backend.
+/yokai-backend/target
+/yokai-backend/Cargo.lock

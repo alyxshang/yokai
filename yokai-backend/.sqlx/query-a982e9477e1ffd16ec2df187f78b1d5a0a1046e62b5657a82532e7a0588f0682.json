@@ -1,0 +1,17 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "INSERT INTO host_info (hostname, primary_color, secondary_color, tertiary_color) VALUES ($1, $2, $3, $4)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text",
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "a982e9477e1ffd16ec2df187f78b1d5a0a1046e62b5657a82532e7a0588f0682"
+}

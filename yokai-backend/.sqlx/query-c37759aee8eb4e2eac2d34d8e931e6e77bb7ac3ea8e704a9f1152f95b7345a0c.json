@@ -1,0 +1,28 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT * FROM invite_codes WHERE invite_code = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "code_id",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "invite_code",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false
+    ]
+  },
+  "hash": "c37759aee8eb4e2eac2d34d8e931e6e77bb7ac3ea8e704a9f1152f95b7345a0c"
+}

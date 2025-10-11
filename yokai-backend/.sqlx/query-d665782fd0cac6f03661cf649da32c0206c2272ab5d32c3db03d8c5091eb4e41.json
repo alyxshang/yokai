@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE users SET secondary_color = $1 WHERE username = $2",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "d665782fd0cac6f03661cf649da32c0206c2272ab5d32c3db03d8c5091eb4e41"
+}

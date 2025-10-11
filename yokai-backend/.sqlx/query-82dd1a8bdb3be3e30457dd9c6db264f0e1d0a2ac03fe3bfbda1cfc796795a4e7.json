@@ -1,0 +1,34 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "SELECT * FROM user_api_tokens WHERE owner = $1",
+  "describe": {
+    "columns": [
+      {
+        "ordinal": 0,
+        "name": "token_id",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 1,
+        "name": "token",
+        "type_info": "Text"
+      },
+      {
+        "ordinal": 2,
+        "name": "owner",
+        "type_info": "Text"
+      }
+    ],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": [
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "82dd1a8bdb3be3e30457dd9c6db264f0e1d0a2ac03fe3bfbda1cfc796795a4e7"
+}

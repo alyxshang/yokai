@@ -1,0 +1,15 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "UPDATE host_info SET secondary_color = $1 WHERE hostname = $2",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text",
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "b965cecf64d0150ccea39448b16d88baacf8fd99c395fb14b90aa7dfac103275"
+}
