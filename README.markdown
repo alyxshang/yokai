@@ -1,6 +1,7 @@
 # YOKAI :shinto_shrine: :japanese_ogre: 
 
 ![Yokai CI](https://github.com/alyxshang/yokai/actions/workflows/yokai.yml/badge.svg)
+![Backend Image CI](https://github.com/alyxshang/yokai/actions/workflows/docker.yml/badge.svg)
 
 ***A protective spirit for your messages. :shinto_shrine: :japanese_ogre:***
 
