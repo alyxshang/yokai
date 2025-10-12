@@ -37,5 +37,3 @@ jobs:
           args: --manifest-path ./yokai-backend/Cargo.toml -- --test-threads=1
         env:
           YOKAI_DB_URL: postgres://postgres:postgres@postgres:5432/yokai
-      - name: "Install Docker."
-        run: sudo apt install -y docker.io
