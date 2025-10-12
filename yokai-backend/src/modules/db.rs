@@ -1480,6 +1480,7 @@ pub async fn get_user_contacts(
     Ok(user_contacts)
 }
 
+// used.
 pub async fn get_user_files(
     user: &str,
     pool: &Pool<Postgres>
@@ -1538,6 +1539,7 @@ pub async fn get_chat_messages(
     Ok(msgs)
 }
 
+// used.
 pub async fn get_user_tokens(
     user: &str,
     pool: &Pool<Postgres>
@@ -1567,6 +1569,7 @@ pub async fn get_user_tokens(
     Ok(tokens)    
 }
 
+// used.
 pub async fn user_exists(
     user: &str,
     pool: &Pool<Postgres>
@@ -1577,6 +1580,7 @@ pub async fn user_exists(
     ).await.is_ok()
 }
 
+// used.
 pub async fn file_on_file(
     file_id: &str,
     pool: &Pool<Postgres>

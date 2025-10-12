@@ -47,3 +47,14 @@ pub struct UserContactsResponse {
 pub struct FileCreateResponse{
     pub file_url: String
 }
+
+#[derive(Serialize)]
+pub struct ListResponse{
+    pub object_ids: Vec<String>
+}
+
+#[derive(Serialize)]
+pub struct DecryptionResponse{
+    pub api_token: String,
+    pub message: String
+}

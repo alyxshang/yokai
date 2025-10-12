@@ -13,6 +13,8 @@ use actix_web::web::Json;
 use super::units::AppData;
 use super::utils::rfc2282;
 use std::env::current_dir;
+use super::db::user_exists;
+use super::db::create_chat;
 use actix_files::NamedFile;
 use super::db::create_user;
 use super::models::UserFile;
@@ -25,15 +27,21 @@ use super::models::InviteCode;
 use super::db::delete_account;
 use super::utils::hash_string;
 use super::db::get_file_by_id;
+use super::db::get_user_files;
+use super::db::create_message;
+use super::db::get_user_tokens;
 use super::models::UserAPIToken;
 use super::db::create_api_token;
 use super::db::create_user_file;
+use super::db::delete_user_file;
 use super::payloads::EditPayload;
 use super::db::get_user_by_token;
 use super::db::edit_host_primary;
 use super::db::edit_user_primary;
 use super::db::get_user_contacts;
 use super::units::FileUploadForm;
+use super::payloads::FilePayload;
+use super::utils::encrypt_message;
 use super::responses::UserContact;
 use super::db::delete_invite_code;
 use super::db::get_token_by_token;
@@ -42,6 +50,7 @@ use super::db::edit_user_tertiary;
 use super::db::edit_host_tertiary;
 use super::db::create_invite_code;
 use super::db::edit_user_password;
+use super::responses::ListResponse;
 use super::payloads::LogoutPayload;
 use super::db::edit_user_secondary;
 use super::db::edit_host_secondary;
@@ -51,11 +60,12 @@ use super::db::edit_user_description;
 use super::responses::StatusResponse;
 use super::payloads::TokenOnlyPayload;
 use super::db::edit_user_display_name;
+use super::payloads::ChatCreatePayload;
 use super::payloads::UserCreatePayload;
+use super::payloads::SendMessagePayload;
 use actix_multipart::form::MultipartForm;
 use super::responses::UserCreateResponse;
 use super::payloads::InviteCreatePayload;
-use super::payloads::UserFileServePayload;
 use super::payloads::ChangePassworPayload;
 use super::responses::UserContactsResponse;
 use super::responses::InviteCreateResponse;
@@ -682,7 +692,7 @@ pub async fn post_file_service(
 
 #[post("/file/serve")]
 pub async fn serve_file_service(
-    payload: Json<UserFileServePayload>,
+    payload: Json<FilePayload>,
     data: Data<AppData>
 ) -> Result<NamedFile, YokaiErr>{
     let user: User = match get_user_by_token(
@@ -718,3 +728,211 @@ pub async fn serve_file_service(
         )
     }
 }
+
+#[post("/files/delete")]
+pub async fn delete_file_service(
+    payload: Json<FilePayload>,
+    data: Data<AppData>
+) -> Result<HttpResponse, YokaiErr>{
+    let user: User = match get_user_by_token(
+       &payload.api_token,
+       &data.pool
+    ).await {
+        Ok(user) => user,
+        Err(e) => return Err::<HttpResponse, YokaiErr>(
+            YokaiErr::new(&e.to_string())
+        )
+    };
+    let file: UserFile = match get_file_by_id(
+        &payload.file_id,
+        &data.pool
+    ).await {
+        Ok(file) => file,
+        Err(e) => return Err::<HttpResponse, YokaiErr>(
+            YokaiErr::new(&e.to_string())
+        )
+    };
+    if user.username == file.file_owner {
+        let del_op: bool = match delete_user_file(
+            &file.file_id,
+            &data.pool
+        ).await {
+            Ok(_f) => true,
+            Err(_e) => false
+        };
+        let response: StatusResponse = StatusResponse{ 
+            status: del_op 
+        };
+        Ok(HttpResponse::Ok().json(response))
+    }
+    else {
+        Err::<HttpResponse, YokaiErr>(
+            YokaiErr::new("File ownership could not be verified.")
+        )
+    }
+}
+
+#[post("/user/tokens")]
+pub async fn list_user_tokens_service(
+    payload: Json<TokenOnlyPayload>,
+    data: Data<AppData>
+) -> Result<HttpResponse, YokaiErr>{
+    let user: User = match get_user_by_token(
+       &payload.api_token,
+       &data.pool
+    ).await {
+        Ok(user) => user,
+        Err(e) => return Err::<HttpResponse, YokaiErr>(
+            YokaiErr::new(&e.to_string())
+        )
+    };
+    let tokens: Vec<UserAPIToken> = match get_user_tokens(
+        &user.username,
+        &data.pool
+    ).await {
+        Ok(tokens) => tokens,
+        Err(e) => return Err::<HttpResponse, YokaiErr>(
+            YokaiErr::new(&e.to_string())
+        )
+    };
+    let mut ids: Vec<String> = Vec::new();
+    for token in tokens {
+        ids.push(token.token_id);
+    }
+    let result: ListResponse = ListResponse{
+        object_ids: ids
+    };
+    Ok(HttpResponse::Ok().json(result))
+}
+
+#[post("/user/files")]
+pub async fn list_user_files_service(
+    payload: Json<TokenOnlyPayload>,
+    data: Data<AppData>
+) -> Result<HttpResponse, YokaiErr>{
+    let user: User = match get_user_by_token(
+       &payload.api_token,
+       &data.pool
+    ).await {
+        Ok(user) => user,
+        Err(e) => return Err::<HttpResponse, YokaiErr>(
+            YokaiErr::new(&e.to_string())
+        )
+    };
+    let files: Vec<UserFile> = match get_user_files(
+        &user.username,
+        &data.pool
+    ).await {
+        Ok(files) => files,
+        Err(e) => return Err::<HttpResponse, YokaiErr>(
+            YokaiErr::new(&e.to_string())
+        )
+    };
+    let mut ids: Vec<String> = Vec::new();
+    for file in files {
+        ids.push(file.file_id);
+    }
+    let result: ListResponse = ListResponse{
+        object_ids: ids
+    };
+    Ok(HttpResponse::Ok().json(result))
+}
+
+#[post("/chat/create")]
+pub async fn create_chat_service(
+    payload: Json<ChatCreatePayload>,
+    data: Data<AppData>
+) -> Result<HttpResponse, YokaiErr>{
+    let user: User = match get_user_by_token(
+       &payload.api_token,
+       &data.pool
+    ).await {
+        Ok(user) => user,
+        Err(e) => return Err::<HttpResponse, YokaiErr>(
+            YokaiErr::new(&e.to_string())
+        )
+    };
+    let recv_exists: bool = user_exists(
+        &payload.receiver, 
+        &data.pool
+    ).await;
+    if recv_exists{
+        let created: bool = match create_chat(
+            &user.username,
+            &payload.receiver,
+            &data.pool
+        ).await {
+            Ok(_c) => true,
+            Err(_e) => false
+        };
+        let status_response: StatusResponse = StatusResponse{ 
+            status: created
+        };
+        Ok(HttpResponse::Ok().json(status_response))
+    }
+    else {
+        Err::<HttpResponse, YokaiErr>(
+            YokaiErr::new("User does not exist.")
+        )
+    }
+}
+
+#[post("/message/send")]
+pub async fn send_message_service(
+    payload: Json<SendMessagePayload>,
+    data: Data<AppData>
+) -> Result<HttpResponse, YokaiErr>{
+    let user: User = match get_user_by_token(
+       &payload.api_token,
+       &data.pool
+    ).await {
+        Ok(user) => user,
+        Err(e) => return Err::<HttpResponse, YokaiErr>(
+            YokaiErr::new(&e.to_string())
+        )
+    };
+    let recv_exists: bool = user_exists(
+        &payload.receiver, 
+        &data.pool
+    ).await;
+    if recv_exists{
+        let encrypted: String = match encrypt_message(
+            &payload.msg,
+            &user.public_key
+        ){
+            Ok(encrypted) => encrypted,
+            Err(e) => return Err::<HttpResponse, YokaiErr>(
+                YokaiErr::new(&e.to_string())
+            )
+        };
+        let new_message: bool = match create_message(
+            &encrypted,
+            &user.username,
+            &payload.chat_id,
+            &payload.receiver,
+            &payload.attachment,
+            &data.pool
+        ).await {
+            Ok(_n) => true,
+            Err(_e) => false
+        };
+        let result: StatusResponse = StatusResponse{
+            status: new_message
+        };
+        Ok(HttpResponse::Ok().json(result))
+    }
+    else {
+        Err::<HttpResponse, YokaiErr>(
+            YokaiErr::new("Receiver does not exist.")
+        )
+    }
+}
+
+/*
+#[post("/message/decrypt")]
+pub async fn decrypt_message_service(
+    payload: Json<DecryptionPayload>,
+    data: Data<AppData>
+) -> Result<HttpResponse, YokaiErr>{
+}
+*/

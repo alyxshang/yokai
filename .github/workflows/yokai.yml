@@ -37,3 +37,5 @@ jobs:
           args: --manifest-path ./yokai-backend/Cargo.toml -- --test-threads=1
         env:
           YOKAI_DB_URL: postgres://postgres:postgres@postgres:5432/yokai
+      - name: "Build Docker image."
+        run: docker build -t yb ./yokai-backend --platform linux/amd64

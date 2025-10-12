@@ -59,7 +59,28 @@ pub struct TokenOnlyPayload{
 }
 
 #[derive(Deserialize)]
-pub struct UserFileServePayload{
+pub struct FilePayload{
     pub file_id: String,
     pub api_token: String
+}
+
+#[derive(Deserialize)]
+pub struct ChatCreatePayload{
+    pub api_token: String,
+    pub receiver: String
+}
+
+#[derive(Deserialize)]
+pub struct SendMessagePayload{
+    pub msg: String,
+    pub api_token: String,
+    pub receiver: String,
+    pub chat_id: String,
+    pub attachment: Option<String>
+}
+
+#[derive(Deserialize)]
+pub struct DecryptionPayload{
+    pub api_token: String,
+    pub message: String
 }
