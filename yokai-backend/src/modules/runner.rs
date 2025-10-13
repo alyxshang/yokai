@@ -115,7 +115,7 @@ pub async fn run_app() -> Result<(), YokaiErr>{
                 .allowed_methods(vec!["GET", "POST"]);
             App::new()
                 .wrap(cors)
-                .wrap(Logger::new("%a %{User-Agent}i")
+                .wrap(Logger::new("%a %{User-Agent}i"))
                 .app_data(state_data.clone())
                 .service(kick_user_service)
                 .service(create_chat_service)
