@@ -41,6 +41,7 @@ use super::db::edit_user_primary;
 use super::db::get_user_contacts;
 use super::units::FileUploadForm;
 use super::payloads::FilePayload;
+use super::utils::decrypt_message;
 use super::utils::encrypt_message;
 use super::responses::UserContact;
 use super::db::delete_invite_code;
@@ -60,12 +61,14 @@ use super::db::edit_user_description;
 use super::responses::StatusResponse;
 use super::payloads::TokenOnlyPayload;
 use super::db::edit_user_display_name;
+use super::payloads::DecryptionPayload;
 use super::payloads::ChatCreatePayload;
 use super::payloads::UserCreatePayload;
 use super::payloads::SendMessagePayload;
 use actix_multipart::form::MultipartForm;
 use super::responses::UserCreateResponse;
 use super::payloads::InviteCreatePayload;
+use super::responses::DecryptionResponse;
 use super::payloads::ChangePassworPayload;
 use super::responses::UserContactsResponse;
 use super::responses::InviteCreateResponse;
@@ -928,11 +931,31 @@ pub async fn send_message_service(
     }
 }
 
-/*
 #[post("/message/decrypt")]
 pub async fn decrypt_message_service(
     payload: Json<DecryptionPayload>,
     data: Data<AppData>
 ) -> Result<HttpResponse, YokaiErr>{
+    let user: User = match get_user_by_token(
+       &payload.api_token,
+       &data.pool
+    ).await {
+        Ok(user) => user,
+        Err(e) => return Err::<HttpResponse, YokaiErr>(
+            YokaiErr::new(&e.to_string())
+        )
+    };
+    let decrypted_msg: String = match decrypt_message(
+        &payload.message,
+        &user.private_key
+    ){
+        Ok(decrypted_msg) => decrypted_msg,
+        Err(e) => return Err::<HttpResponse, YokaiErr>(
+            YokaiErr::new(&e.to_string())
+        )
+    };
+    let result: DecryptionResponse = DecryptionResponse{
+        message: decrypted_msg
+    };
+    Ok(HttpResponse::Ok().json(result))
 }
-*/

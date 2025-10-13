@@ -19,6 +19,8 @@ use super::utils::encrypt_message;
 use super::utils::generate_keypair;
 use super::utils::create_connection;
 
+use super::db::create_user;
+
 #[tokio::test]
 pub async fn test_utils(){
     let rfc_str: String = rfc2282();
@@ -52,4 +54,8 @@ pub async fn test_utils(){
     let decrypted: String = decrypt_message(&encrypted, &keys.private_key)
         .expect("Error decrypting.");
     assert_eq!(msg, decrypted);
+}
+
+#[tokio::test]
+pub async fn test_database(){
 }

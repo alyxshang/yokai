@@ -18,6 +18,24 @@ I am not responsible or liable for any illegal activities conducted on
 instances of ***Yokai***. That responsibility falls to owners or 
 administrators of a ***Yokai*** instance.
 
+## USAGE :hammer:
+
+### ENVIRONMENT VARIABLES
+
+- ``: 
+- ``: 
+- ``: 
+- ``: 
+- ``: 
+- ``: 
+- ``: 
+- ``: 
+- ``: 
+- ``: 
+- ``: 
+- ``: 
+
+
 ## STATUS :warning:
 
 ***THIS PROJECT IS STILL WORK IN PROGRESS!***

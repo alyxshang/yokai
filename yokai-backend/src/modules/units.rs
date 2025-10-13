@@ -22,6 +22,7 @@ pub struct AppData {
 }
 
 pub struct Config{
+    pub db_url: String,
     pub hostname: String,
     pub app_host: String,
     pub app_port: String,

@@ -55,6 +55,5 @@ pub struct ListResponse{
 
 #[derive(Serialize)]
 pub struct DecryptionResponse{
-    pub api_token: String,
     pub message: String
 }
