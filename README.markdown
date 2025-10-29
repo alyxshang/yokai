@@ -20,21 +20,7 @@ administrators of a ***Yokai*** instance.
 
 ## USAGE :hammer:
 
-### ENVIRONMENT VARIABLES
-
-- ``: 
-- ``: 
-- ``: 
-- ``: 
-- ``: 
-- ``: 
-- ``: 
-- ``: 
-- ``: 
-- ``: 
-- ``: 
-- ``: 
-
+***COMING SOON!***
 
 ## STATUS :warning:
 
