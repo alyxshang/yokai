@@ -1,0 +1,4 @@
+"title" >~< "Yokai Rendering example"
+"page_heading" >~< "A page rendered by Yokai"
+"footer_text" >~< "Yokai was written by @alyxshang"
+"blurb" >~< "This page has been rendered using the Yokai templating engine."

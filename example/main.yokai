@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html>
+ {% include "header.yokai" %}
+ <body>
+  {% include "body.yokai" %}
+  {% include "footer.yokai" %}
+ </body>
+</html>

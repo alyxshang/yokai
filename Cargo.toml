@@ -1,0 +1,13 @@
+[package]
+name = "yokai"
+version = "0.1.0"
+edition = "2024"
+author = ["Alyx Shang <alyxshang@alyxshang.boo>"]
+license-file = "LICENSE"
+readme = "README.markdown"
+description= "A minimalist and simple templating engine."
+homepage = "https://github.com/alyxshang/yokai"
+repository = "https://github.com/alyxshang/yokai"
+
+[dependencies]
+serde = { version = "1.0.228", features = ["derive"] }
